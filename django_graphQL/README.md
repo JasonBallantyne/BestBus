@@ -1,7 +1,7 @@
 # A basic django-graphQL implementation.
 
-## Requirements
-run `pip install django, graphene, graphene_django`
+### Requirements
+run `pip install requirements.txt` from root folder.
 
 ### `python manage.py runserver` 
 Run the development server on windows, from the project root folder (django_graphQL).
