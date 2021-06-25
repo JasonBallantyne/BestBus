@@ -9,6 +9,6 @@ Users can interact with our service using a mobile optimised web app. We have tr
 ### Front-end
 This front-end of the application app is built using React.js.
 
-## Back-end
+### Back-end
 The back-end of the application is built using a MySql database and a Django/GraphQL framework.
 
