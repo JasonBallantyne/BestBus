@@ -28,4 +28,14 @@ Primary settings and url routing is located here.
 
 ### `customers`
 Settings for a customers schema here. The data is located on the root address. 
+
+### GraphQL data structure
+
+{
+  allCustomers {
+    id
+    name
+    gender
+  }
+}
   

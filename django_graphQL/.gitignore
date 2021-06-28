@@ -1,2 +1,5 @@
 .idea
 venv
+schema.json
+*.pyc
+*pyo
