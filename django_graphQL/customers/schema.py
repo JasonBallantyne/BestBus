@@ -2,7 +2,8 @@ import graphene
 from graphene_django import DjangoObjectType
 from .models import Customers
 
-'''The following classes and class methods are for providing graphene/GraphQL mutations.'''
+'''The following classes and class methods are for providing 
+graphene/GraphQL mutations.'''
 
 
 class CustomerType(DjangoObjectType):

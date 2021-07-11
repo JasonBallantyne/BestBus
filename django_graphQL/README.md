@@ -1,5 +1,6 @@
-# A basic django-graphQL implementation.
+# A django-graphQL implementation.
 
+## 1. Key Commands
 ### Requirements
 run `pip install -r requirements.txt` from project root folder.
 
@@ -7,82 +8,48 @@ run `pip install -r requirements.txt` from project root folder.
 Run the development server on windows, from the project root folder (django_graphQL).
 
 ### `python3 manage.py runserver`
-Run the development server on Mac, from the project root folder (django_graphQL)..
+Run the development server on Mac, from the project root folder (django_graphQL).
 
 The corresponding url is the http://127.0.0.1:8000/, but this may differ on another machine. 
 
-![graphQL_display](https://user-images.githubusercontent.com/71881578/122923945-1f91cc00-d35d-11eb-87c9-f255b29205c0.PNG)
+## 2. Directory Contents
+`bus_routes/`
+Django bus_routes application. Further readme details within.
 
-It should be possible to use a front end language to pull this graphQL data as JSON. There is currently
-only one entry in the array, a dummy entry for testing purposes. 
+`customers/`
+Django customers application. Further readme details within.
 
-## 1. Contents
-### 1.1 `manage.py`
-For primary functionality execution - adding users, running the server, etc.
+`django_graphgQL/`
+General django settings files, including url routing and provision for the above applications.
 
-### 1.2 `db.sqlite3`
-A dummy sqlite file with a single data entry for testing purposes
+`db.sqlite3`
+SQLite database containing routes and customers information.
 
-### 1.3 `django_graphQL`
-Primary settings and url routing is located here.
+`manage.py`
+Provision of django functionality.
 
-### 1.4 `customers`
-The customers directory is a django application. It handles the creation and control of the "customers" schema in the database. This is currently a dummy database.
+`requirements.txt`
+Package requirements for django implementation.
 
-#### 1.4.1 `customers/models.py`
-Handles the creation and structure of the database models. We extend the django models class to create our own model class, in this case "customers." This
+`route_data_parser.py`
+A script for parsing route data information from multiple web sources and inserting it to 
+the SQLite db. Takes some time to run.
 
-#### 1.4.2 `customers/schema.py`
-This provides functionality for the provision of graphQL mutations. Currently implemented mutations are listed below, and an example of a representative GraphQL statement:
+`gtfs_api_scraper.py`
+Capacity for scraping the transport for ireland live gtfs data via api. Possibly redundant.
 
-`CreateCustomer`
-Add an additional entrant to the schema.
+`gtfs_static_scraper.py`
+Scrapes, unzips, and stores gtfs static data for use in route_data_parser.py. Some of these files are
+large, sp they are listed in the .gitignore. Scraping them does not take too long and is only
+necessary if updating the db with fresh routes data.
 
-mutation {
-  createCustomer (name:"Sample Entrant", gender: "male") {
-    id
-    name
-    gender
-  }
-}
-
-`UpdateCustomer`
-Alter an existing entrants data. Id is a required parameter.
-
-mutation {
-  updateCustomer (id:7, name:"Sample Entrant", gender:"male") {
-    id
-    name
-    gender
-  }
-}
-
-
-`DeleteCustomer`
-Remove a previous included entrant.
-
-mutation {
-  deleteCustomer (id:8) {
-    id
-  }
-}
-
-#### 1.4.3 `customers/urls.py`
-Handles the url path of the customers application. Also provides the graphQL interactive graphical display at that path. Below is a sample graphQL query for all
-information in the sample database.
-
-{  
-  allCustomers {  
-    id  
-    name  
-    gender  
-  }  
-}  
   
-## 2. Tutorials and resources involved in the creation of this application
+## 3. Tutorials and resources involved in the creation of this application
 
 https://blog.logrocket.com/creating-an-app-with-react-and-django/
 
 https://zoejoyuliao.medium.com/django-graphql-react-1-integrate-graphql-into-your-django-project-ff51237bb5d9
 
 https://stackoverflow.com/questions/55442189/delete-mutation-in-django-graphql
+
+https://docs.graphene-python.org/en/latest/types/objecttypes/#resolvers
