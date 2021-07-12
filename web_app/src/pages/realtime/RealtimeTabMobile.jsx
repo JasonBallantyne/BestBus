@@ -1,19 +1,19 @@
-import UserDropdown from "../components/UserDropdown"
-import GoogleMap from "../components/GoogleMap"
+import UserDropdown from "../../components/UserDropdown"
+import GoogleMap from "../../components/GoogleMap"
 
 function RealtimeTab() {
   const content = {
     display: "grid",
     margin: "5rem 3rem",
-    gridTemplateColumns: "1fr 2fr"
+    gridTemplateRows: "1fr 2fr"
   };
   const dropdownsContainer = {
     background: "lightgrey",
     gridColumnStart: "1",
     gridColumnEnd: "2",
-    margin: "0 0 0 3rem",
+    margin: "3rem",
     display: "grid",
-    gridTemplateRows: "1fr 1fr"
+    gridTemplateColumns: "1fr 1fr"
   };
   const userdropdownContainer  = {
     margin: "3rem"
@@ -23,8 +23,8 @@ function RealtimeTab() {
   };
   const mapContainer = {
     background: "lightgrey",
-    gridColumnStart: "2",
-    gridColumnEnd: "3",
+    gridColumnStart: "1",
+    gridColumnEnd: "2",
     margin: "0 3rem"
   };
   return(
