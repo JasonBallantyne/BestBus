@@ -11,7 +11,7 @@ const CUSTOMERS = gql`
   }
 `;
 
-function SearchDropdown(endpoint) {
+function  UserDropdown(endpoint) {
 
   const { loading, error, data } = useQuery(CUSTOMERS);
   const [nameSearch, setNameSearch] = useState('');
@@ -43,4 +43,4 @@ function SearchDropdown(endpoint) {
   )
 }
 
-export default SearchDropdown;
+export default UserDropdown;
