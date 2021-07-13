@@ -1,4 +1,4 @@
 .idea
 *.pyc
-.env
+web_app/.env
 django_graphQL/data
