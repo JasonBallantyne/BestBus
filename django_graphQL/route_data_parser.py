@@ -80,6 +80,11 @@ def create_id(row):
     return row["shape_id"] + "_" + row["stop_num"]
 
 
+# function to remove headsign string leading whitespace
+def remove_leading_whitespace(row):
+    return row["stop_headsign"].lstrip()
+
+
 # function for isolating the stop number for each row
 def stop_finder(row):
     stop_string = row['stop_name'].split(' ')
@@ -113,6 +118,9 @@ print("stop numbers added successfully.")
 
 merged_df["id"] = merged_df.apply(create_id, axis=1)
 print("row id value created successfully.")
+
+merged_df["stop_headsign"] = merged_df.apply(remove_leading_whitespace, axis=1)
+print("successfully removed leading whitespaces from headsign string.")
 
 print("Data successfully merged. Altering column headers...")
 
