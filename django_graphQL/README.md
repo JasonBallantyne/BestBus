@@ -1,8 +1,12 @@
 # A django-graphQL implementation.
 
-## 1. Key Commands
-### Requirements
-run `pip install -r requirements.txt` from project root folder.
+## 1. Essential commands and requirements
+
+### request and include appropriate config file in:
+django_graphQL/bus_routes/weather/weather_config.py and
+django_graphQL/gtfs_data/api_config.py
+
+### run `pip install -r requirements.txt` from project root folder.
 
 ### `python manage.py runserver` 
 Run the development server on windows, from the project root folder (django_graphQL).
@@ -22,6 +26,9 @@ Django customers application. Further readme details within.
 `django_graphgQL/`
 General django settings files, including url routing and provision for the above applications.
 
+`data/`
+contains sourcing and parsing scripts for various data sources used in the application.
+
 `db.sqlite3`
 SQLite database containing routes and customers information.
 
@@ -30,18 +37,6 @@ Provision of django functionality.
 
 `requirements.txt`
 Package requirements for django implementation.
-
-`route_data_parser.py`
-A script for parsing route data information from multiple web sources and inserting it to 
-the SQLite db. Takes some time to run.
-
-`gtfs_api_scraper.py`
-Capacity for scraping the transport for ireland live gtfs data via api. Possibly redundant.
-
-`gtfs_static_scraper.py`
-Scrapes, unzips, and stores gtfs static data for use in route_data_parser.py. Some of these files are
-large, sp they are listed in the .gitignore. Scraping them does not take too long and is only
-necessary if updating the db with fresh routes data.
 
   
 ## 3. Tutorials and resources involved in the creation of this application

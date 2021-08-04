@@ -1,5 +1,7 @@
-import UserDropdown from "../../components/UserDropdown"
+import StopsDropdown from "../../components/StopsDropdown"
+import RoutesDropdown from "../../components/RoutesDropdown"
 import GoogleMap from "../../components/GoogleMap"
+import { StationsProvider } from "../../contexts/stations"
 
 function RealtimeTab() {
   const content = {
@@ -13,12 +15,13 @@ function RealtimeTab() {
     gridColumnEnd: "2",
     margin: "3rem",
     display: "grid",
-    gridTemplateColumns: "1fr 1fr"
+    gridTemplateColumns: "1fr 1fr",
+    height: "500px"
   };
-  const userdropdownContainer  = {
-    margin: "3rem"
+  const stopsDropdownContainer  = {
+    margin: "3rem 5rem"
   };
-  const stopdropdownContainer  = {
+  const routesDropdownContainer  = {
     margin: "3rem"
   };
   const mapContainer = {
@@ -28,21 +31,21 @@ function RealtimeTab() {
     margin: "0 3rem"
   };
   return(
-    <div>
+    <StationsProvider>
       <div style={content}>
         <div style={dropdownsContainer}>
-          <div style={userdropdownContainer}>
-            <UserDropdown />
+          <div style={stopsDropdownContainer}>
+            <StopsDropdown />
           </div>
-          <div style={stopdropdownContainer}>
-            <UserDropdown />
+          <div style={routesDropdownContainer}>
+            <RoutesDropdown />
           </div>
         </div>
         <div style={mapContainer}>
           <GoogleMap />
         </div>
       </div>
-    </div>
+    </StationsProvider>
   )
 }
 
