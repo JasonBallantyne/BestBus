@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import RealtimeTab from './pages/realtime/RealtimeTab'
 import RealtimeTabMobile from './pages/realtime/RealtimeTabMobile.jsx'
-import PlannerTab from './pages/PlannerTab'
+import PlannerTab from './pages/planner/PlannerTab'
 import SettingsTab from './pages/SettingsTab'
 class App extends Component {
   constructor(props) {
