@@ -12,5 +12,5 @@ This front-end of the application app is built using React.js.
 ### Back-end
 The back-end of the application is built using a MySql database and a Django/GraphQL framework.
 
-## notebooks
-Contains a set of data analysis notebooks used throughout the project
+## Data-Analytics
+Contains notebooks used to clean, prepare and model datasets.

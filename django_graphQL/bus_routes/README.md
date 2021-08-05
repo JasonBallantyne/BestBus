@@ -4,6 +4,11 @@ The graphQL interface for this django app is found at http://127.0.0.1:8000.
 
 The application contains the following files and directories:
 
+`route_models/`
+Linear regression models for bus route predictions.
+- Inputs for the prediction: Hour, Day, Month, Rain & Temperature.
+- Outputs of the prediction: Journey Time.
+
 `migrations/`
 Contains a record of migrations applied by Django to the bus_routes schema.
 
