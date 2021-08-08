@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 let deferredPrompt;  
     
 export default function InstallButton() {
+  const container = {
+    margin: "4rem",
+  };
+
   const [installable, setInstallable] = useState(false);
 
   useEffect(() => {
@@ -37,15 +41,14 @@ export default function InstallButton() {
   };
   
   return (
-    <div className="Container">
-      {installable &&
+    <div style={container}>
         <div>
-          <h2>Click button to install app:</h2>
-          <button className="install-button" onClick={handleInstallClick}>
-            INSTALL ME
-          </button>
+          <h3>Install app:</h3>
+          {installable
+            ? <button className="install-button" onClick={handleInstallClick}>Install</button>
+            : <p>Installation is not available. (Is the app already installed, or does your broweser support this feature?)</p>
+          }
         </div>
-      }
     </div>
   );
 };
