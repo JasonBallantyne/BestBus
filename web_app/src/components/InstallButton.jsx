@@ -1,44 +1,46 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 
-let deferredPrompt;  
+// let deferredPrompt;  
     
 export default function InstallButton() {
   const container = {
     margin: "4rem",
   };
 
-  const [installable, setInstallable] = useState(false);
+  // all of this commented out code was for the dyamic button, I may revisit this to try and fix its functionality at a later date
 
-  useEffect(() => {
-    window.addEventListener("beforeinstallprompt", (e) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      deferredPrompt = e;
-      // Update UI notify the user they can install the PWA
-      setInstallable(true);
-    });
+  // const [installable, setInstallable] = useState(false);
 
-    window.addEventListener('appinstalled', () => {
-      // Log install to analytics
-      console.log('INSTALL: Success');
-    });
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("beforeinstallprompt", (e) => {
+  //     // Prevent the mini-infobar from appearing on mobile
+  //     e.preventDefault();
+  //     // Stash the event so it can be triggered later.
+  //     deferredPrompt = e;
+  //     // Update UI notify the user they can install the PWA
+  //     setInstallable(true);
+  //   });
 
-  const handleInstallClick = (e) => {
-      // Hide the app provided install promotion
-      setInstallable(false);
-      // Show the install prompt
-      deferredPrompt.prompt();
-      // Wait for the user to respond to the prompt
-      deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-      });
-  };
+  //   window.addEventListener('appinstalled', () => {
+  //     // Log install to analytics
+  //     console.log('INSTALL: Success');
+  //   });
+  // }, []);
+
+  // const handleInstallClick = (e) => {
+  //     // Hide the app provided install promotion
+  //     setInstallable(false);
+  //     // Show the install prompt
+  //     deferredPrompt.prompt();
+  //     // Wait for the user to respond to the prompt
+  //     deferredPrompt.userChoice.then((choiceResult) => {
+  //       if (choiceResult.outcome === 'accepted') {
+  //         console.log('User accepted the install prompt');
+  //       } else {
+  //         console.log('User dismissed the install prompt');
+  //       }
+  //     });
+  // };
   
   return (
     <div style={container}>
