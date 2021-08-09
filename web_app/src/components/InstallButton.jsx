@@ -44,10 +44,15 @@ export default function InstallButton() {
     <div style={container}>
         <div>
           <h3>Install app:</h3>
-          {installable
+          <p>For ease of use, we suggest installing this app on your device for better performance and ease of accessibility.</p>
+          <p>To make this possible, this app is a PWA (progressive web app). Go to your browser settings and click the option "Install Best Bus".</p>
+          <p>Unfortunatley, some browsers and devices do not support this feature.</p>
+          {/* The below code shows an installation button, however the feature has issues with only firing once and in certain conditions */}
+          {/* Mnaual install is probably best for now */}
+          {/* {installable
             ? <button className="install-button" onClick={handleInstallClick}>Install</button>
-            : <p>Installation is not available. (Is the app already installed, or does your broweser support this feature?)</p>
-          }
+            : <p><b><i></i>Installation is not available.</b></p>
+          } */}
         </div>
     </div>
   );
