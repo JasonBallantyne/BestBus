@@ -46,7 +46,7 @@ export default function InstallButton() {
           <h3>Install app:</h3>
           {installable
             ? <button className="install-button" onClick={handleInstallClick}>Install</button>
-            : <p>Installation is not available. (Is the app already installed, or does your broweser support this feature?)</p>
+            : <p>Installation is not available. (Is the app already installed, or does your browser support this feature?)</p>
           }
         </div>
     </div>
