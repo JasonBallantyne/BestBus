@@ -8,6 +8,7 @@ import {
   InMemoryCache,
   ApolloProvider
 } from "@apollo/client";
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const client = new ApolloClient({
   uri: 'http://127.0.0.1:8000',
@@ -27,3 +28,5 @@ ReactDOM.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+serviceWorkerRegistration.register();
