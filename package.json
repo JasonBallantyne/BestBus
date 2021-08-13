@@ -1,6 +1,9 @@
 {
   "name": "web_app",
   "version": "0.1.0",
+  "engines": {
+    "node": "14.17.2"
+  },
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.20",
