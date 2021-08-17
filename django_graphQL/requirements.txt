@@ -1,4 +1,4 @@
-aniso8601==7.0.0
+python manaaniso8601==7.0.0
 asgiref==3.3.4
 certifi==2021.5.30
 chardet==4.0.0

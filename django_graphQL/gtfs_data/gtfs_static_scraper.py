@@ -15,7 +15,7 @@ zipurl = 'https://transitfeeds.com/p/transport-for-ireland/782/latest/download'
 # Download the file from the URL
 print("Accessing zip.")
 zipresp = urlopen(zipurl)
-tempzip = open("/tmp/tempfile.zip", "wb")
+tempzip = open("tempfile.zip", "wb")
 
 # Write the contents of the downloaded file into the new file
 tempzip.write(zipresp.read())
@@ -23,7 +23,7 @@ tempzip.write(zipresp.read())
 # Close the newly-created file
 tempzip.close()
 # Re-open the newly-created file with ZipFile()
-zf = ZipFile("/tmp/tempfile.zip")
+zf = ZipFile("tempfile.zip")
 
 # Extract its contents into <extraction_path>
 print("Writing dataset to path.")
@@ -61,5 +61,6 @@ os.remove("gtfs_datafiles/calendar_dates.txt")
 os.remove("gtfs_datafiles/shapes.txt")
 os.remove("gtfs_datafiles/routes.txt")
 os.remove("gtfs_datafiles/trips.txt")
+os.remove("tempfile.zip")
 
 print("Finshed.")

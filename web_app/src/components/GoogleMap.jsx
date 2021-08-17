@@ -1,5 +1,6 @@
 import GoogleMapReact from 'google-map-react';
-import MapPin from "./MapPin"
+import MapPinRoute from "./MapPinRoute";
+import MapPinStop from "./MapPinStop";
 import { useContext } from "react";
 import { StationsContext } from "../contexts/stations"
 
@@ -46,44 +47,64 @@ export default function SimpleMap(){
       state[0].forEach((stop, idx, array) => {
         if (idx === 0) {
           pins.push(
-            <MapPin
+            <MapPinRoute
               key={stop.stopNum}
-              lat={stop.latitude}
+              lineId={stop.lineId}
+              direction={stop.direction}
+              destination={stop.destination}
               lng={stop.longitude}
-              name={stop.stopName}
+              lat={stop.latitude}
+              stopName={stop.stopName}
+              stopNum={stop.stopNum}
+              irishName={stop.irishName}
+              departureSchedule={stop.departureSchedule}
               markerColor="green"
             />
           )
         } else if (idx === array.length - 1) {
           pins.push(
-            <MapPin
+            <MapPinRoute
               key={stop.stopNum}
-              lat={stop.latitude}
+              lineId={stop.lineId}
+              direction={stop.direction}
+              destination={stop.destination}
               lng={stop.longitude}
-              name={stop.stopName}
+              lat={stop.latitude}
+              stopName={stop.stopName}
+              stopNum={stop.stopNum}
+              irishName={stop.irishName}
+              departureSchedule={stop.departureSchedule}
               markerColor="red"
             />
           )
         } else {
           pins.push(
-            <MapPin
+            <MapPinRoute
               key={stop.stopNum}
-              lat={stop.latitude}
+              lineId={stop.lineId}
+              direction={stop.direction}
+              destination={stop.destination}
               lng={stop.longitude}
-              name={stop.stopName}
+              lat={stop.latitude}
+              stopName={stop.stopName}
+              stopNum={stop.stopNum}
+              irishName={stop.irishName}
+              departureSchedule={stop.departureSchedule}
               markerColor="black"
             />
           )
         }
       });
-      title = <div style={header}><h1>Route: {state[0][0].routeNum} ({state[0][0].direction})</h1></div>
+      title = <div style={header}><h1>Route: {state[0][0].lineId} ({state[0][0].direction})</h1></div>
     } else {
       pins.push(
-        <MapPin
+        <MapPinStop
           key={state[0].stopNum}
           lat={state[0].latitude}
           lng={state[0].longitude}
-          name={state[0].stopName}
+          stopName={state[0].stopName}
+          stopNum={state[0].stopNum}
+          irishName={state[0].irishName}
           markerColor={"black"}
           openPopup={true}
         />

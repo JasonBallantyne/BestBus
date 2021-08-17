@@ -2,13 +2,15 @@
 def agus_ainm(row, first_list, filtered_list):
     if row['stop_id'] in filtered_list:
         item = first_list[filtered_list.index(row['stop_id'])]
+        print(item[1])
         return item[1]
 
 
 # function to find and match the row with its correct customer facing route number
-def route_finder(row):
-    id_strings = row['trip_id'].split('-')
-    return id_strings[1]
+def line_id(row):
+    shape_id = row['shape_id']
+    line_id = shape_id.split('-')[1]
+    return line_id
 
 
 # function to create id column values
@@ -16,8 +18,15 @@ def create_id(row):
     return row["shape_id"] + "_" + row["stop_num"]
 
 
+def stop_sequencing_id(row):
+    return row["line_id"] + "_" \
+           + row["stop_num"] + "_" \
+           + row["direction"] + "_" \
+           + str(row["stop_sequence"])
+
+
 # function for isolating the stop number for each row
-def stop_finder(row):
+def stop_number(row):
     stop_string = row['stop_name'].split(' ')
     if stop_string[-1].isdigit:
         return stop_string[-1]
@@ -35,136 +44,58 @@ def route_direction(row):
 
 
 # and one more to change the trip_id to a shape_id as we have no need of unique trip info here
-# this whole process has been about removing duplicated "shape" gtfs_data, so unique trips don't help
-def trip_to_shape_id(row):
-    id_string = row['trip_id'].split('.')
-    shape_id = id_string[2] + '.' + id_string[3] + '.' + id_string[4]
+def shape_id(row):
+    trip_id = row['trip_id']
+    shape_strings = trip_id.split('.')
+    shape_id = shape_strings[2] + '.' + shape_strings[3] + "." + shape_strings[4]
     return shape_id
 
 
 def stops(row, df):
-    current_route = row['route_num']
-    stops_df = df[df['route_num'] == current_route]
-    outbound_stops = stops_df[stops_df['direction'] == "outbound"]
-    inbound_stops = stops_df[stops_df['direction'] == "inbound"]
-    outbound_stops = outbound_stops["stop_num"].unique().tolist()
-    inbound_stops = inbound_stops["stop_num"].unique().tolist()
+    all_stops = df["stop_num"]
 
-    if row["direction"] == "outbound":
-        stops = outbound_stops
-    if row["direction"] == "inbound":
-        stops = inbound_stops
-
-    if len(stops) == 0:
+    if len(all_stops) == 0:
         stops = "None"
     else:
-        stops = ", ".join(stops)
+        stops = ", ".join(all_stops)
     return stops
 
 
 def names(row, df):
-    current_route = row['route_num']
-    current = df[df['route_num'] == current_route]
-    inbound_names = current[current["direction"] == "inbound"]
-    outbound_names = current[current["direction"] == "outbound"]
-    inbound_names = inbound_names['stop_name'].unique().tolist()
-    outbound_names = outbound_names['stop_name'].unique().tolist()
-
-    if row["direction"] == "outbound":
-        names = outbound_names
-    if row["direction"] == "inbound":
-        names = inbound_names
-
-    if len(names) == 0:
-        names = "None"
-
-    else:
-        names_modified = []
-        for item in names:
-            names_modified.append(item.split(",")[0])
-        names = names_modified
-        names = ([str(x) for x in names])
-        names = ", ".join(names)
+    all_names = df["stop_name"].tolist()
+    names = ", ".join(all_names)
     return names
 
 
+def stop_name(row):
+    name = row["stop_name"].split(",")[0]
+    return name
+
+
 def coordinates(row, df, coordinate):
-    current_route = row['route_num']
-    current = df[df['route_num'] == current_route]
-    inbound_coordinate = current[current["direction"] == "inbound"]
-    outbound_coordinate = current[current["direction"] == "outbound"]
-    inbound_coordinate = inbound_coordinate[coordinate].unique().tolist()
-    outbound_coordinate = outbound_coordinate[coordinate].unique().tolist()
+    all_coords = df[coordinate].unique().tolist()
 
-    if row["direction"] == "outbound":
-        coord = outbound_coordinate
-    if row["direction"] == "inbound":
-        coord = inbound_coordinate
-
-    if len(coord) == 0:
+    if len(all_coords) == 0:
         coord = "None"
     else:
-        coord = ([str(x) for x in coord])
-        coord = ", ".join(coord)
+        all_coords = ([str(x) for x in all_coords])
+        coord = ", ".join(all_coords)
     return coord
 
 
 def create_uniques_id(row):
-    return row["route_num"] + "_" + row["direction"]
+    return row["line_id"] + "_" + row["direction"]
 
 
 def gach_ainm(row, df):
-    current_route = row['route_num']
-    ainm_df = df[df['route_num'] == current_route]
-    gach_ainm = ainm_df['ainm'].unique().tolist()
+    gach_ainm = df['ainm'].tolist()
+    gach_ainm = ([str(x) for x in gach_ainm])
+    gach_ainm = ", ".join(gach_ainm)
 
-    if len(gach_ainm) == 0:
-        ainms = "None"
-    else:
-        gach_ainm = ([str(x) for x in gach_ainm])
-        ainms = ", ".join(gach_ainm)
-    return ainms
+    return gach_ainm
 
 
-def find_longest(df):
-    route_shapes = df["shape_id"].unique().tolist()
-    longest_inbound = ""
-    longest_outbound = ""
-    length_inbound = 0
-    length_outbound = 0
-
-    for shape in route_shapes:
-        temp_df = df[df["shape_id"] == shape]
-        direction = temp_df["direction"].unique().tolist()
-
-        if direction[0] == "inbound" and temp_df.shape[0] > length_inbound:
-            longest_inbound = shape
-            length_inbound = temp_df.shape[0]
-        elif direction[0] == "outbound" and temp_df.shape[0] > length_outbound:
-            longest_outbound = shape
-            length_outbound = temp_df.shape[0]
-
-    return [longest_outbound, longest_inbound]
-
-
-def modify_merged_df(df, first_list, filtered_list):
-    print("Merging and altering dateframe, this may take some time...")
-    df['ainm'] = df.apply(agus_ainm, first_list=first_list, filtered_list=filtered_list, axis=1)
-    df['route_num'] = df.apply(route_finder, axis=1)
-    df['shape_id'] = df.apply(trip_to_shape_id, axis=1)
-    df['stop_num'] = df.apply(stop_finder, axis=1)
-    df["id"] = df.apply(create_id, axis=1)
-    df["direction"] = df.apply(route_direction, axis=1)
-
-    print("Data successfully merged. Altering column headers...")
-
-    df.rename(columns={"stop_headsign": "destination",
-                       "stop_lat": "latitude",
-                       "stop_lon": "longitude"}, inplace=True)
-
-
-def modify_df(df, shape):
-    df = df[df["shape_id"] == shape]
+def modify_df(df):
     if df.empty:
         pass
     else:
@@ -175,6 +106,9 @@ def modify_df(df, shape):
         df['gach_ainm'] = df.apply(gach_ainm, df=df, axis=1)
         df['id'] = df.apply(create_uniques_id, axis=1)
 
+    df = df.drop(["stop_num", "latitude", "longitude",
+                  "stop_name", "ainm", "stop_sequence",
+                  "departure_time", "arrival_time", "stop_id"], axis=1)
     return df
 
 
@@ -189,3 +123,97 @@ def drop_columns(df):
              "names",
              "gach_ainm"]].sort_values(by='route_num')
     return df
+
+
+def sorting_seconds(time_list):
+    ftr = [3600, 60, 1]
+    times_in_seconds = []
+
+    for time in time_list:
+        time_units = time.split(':')
+        total_secs = (int(time_units[0]) * ftr[2]) + (int(time_units[1]) * ftr[1]) + (int(time_units[0]) * ftr[0])
+        times_in_seconds.append(total_secs)
+
+    times_in_seconds.sort()
+    return times_in_seconds
+
+
+def to_timestamp(seconds):
+    hour = 3600
+    minute = 60
+
+    hours = str(int(seconds / hour))
+    minutes = str(int((seconds % hour) / minute))
+
+    if len(hours) == 1:
+        hours = f"0{hours}"
+    if len(minutes) == 1:
+        minutes = f"0{minutes}"
+
+    seconds = f"00"
+
+    timestamp = f"{hours}:{minutes}:{seconds}"
+
+    return timestamp
+
+
+def sorted_timestamps(times_in_seconds):
+    sorted_timestamps = []
+
+    for time in times_in_seconds:
+        sorted_timestamps.append(to_timestamp(time))
+
+    return sorted_timestamps
+
+
+def departure_times(df):
+    first_stop = df[df["stop_sequence"] == 1]
+    first_stop_times = first_stop["departure_time"].unique().tolist()
+    sorted_seconds = sorting_seconds(first_stop_times)
+    first_stop_times = sorted_timestamps(sorted_seconds)
+    first_stop_times = ([str(x) for x in first_stop_times])
+    first_stop_times = ", ".join(first_stop_times)
+    return first_stop_times
+
+
+def destination_whitespace(row):
+    return row["destination"].lstrip()
+
+
+def make_string(row):
+    return int(row["stop_sequence"])
+
+
+def sort_by_sequence(df):
+    df['sort'] = df.apply(make_string, axis=1)
+    df.sort_values('sort', inplace=True, ascending=True)
+    df = df.drop('sort', axis=1)
+
+    return df
+
+
+def all_routes(row, df, pruned_df):
+    all_lines_for_stop = df["line_id"].unique().tolist()
+
+    return_list = []
+    for line in all_lines_for_stop:
+        # print(f"----{line}----")
+        line_df = pruned_df[pruned_df["line_id"] == line]
+        all_stops_seqs = line_df["stop_sequence"].unique().tolist()
+        route_length = 0
+        for stop in all_stops_seqs:
+            if stop > route_length:
+                route_length = stop
+
+        # print("line length: ", route_length)
+        filtered_df = df[df["line_id"] == line]
+        sequence = filtered_df["stop_sequence"].unique().tolist()[0]
+        destination = filtered_df["destination"].unique().tolist()[0]
+        direction = filtered_df["direction"].unique().tolist()[0]
+        # print("sequence: ", sequence)
+        divisor = round(route_length / sequence, 2)
+
+        return_list.append(f"[{line}, {divisor}, {direction}, {destination}]")
+
+    return_list = ", ".join(return_list)
+    return return_list

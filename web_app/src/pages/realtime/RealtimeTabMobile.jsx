@@ -33,6 +33,9 @@ function RealtimeTab() {
   return(
     <StationsProvider>
       <div style={content}>
+        <div style={mapContainer}>
+          <GoogleMap />
+        </div>
         <div style={dropdownsContainer}>
           <div style={stopsDropdownContainer}>
             <StopsDropdown />
@@ -40,9 +43,6 @@ function RealtimeTab() {
           <div style={routesDropdownContainer}>
             <RoutesDropdown />
           </div>
-        </div>
-        <div style={mapContainer}>
-          <GoogleMap />
         </div>
       </div>
     </StationsProvider>

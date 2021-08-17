@@ -3,7 +3,6 @@ from django.db import models
 
 class BusRoute(models.Model):
     id = models.CharField("id", max_length=100, primary_key=True, default="None")
-    trip_id = models.CharField("trip_id", max_length=100, default=0)
     shape_id = models.CharField("shape_id", max_length=100, default=0)
     stop_id = models.CharField("stop_id", max_length=50)
     stop_sequence = models.IntegerField("stop_sequence")
@@ -12,7 +11,7 @@ class BusRoute(models.Model):
     latitude = models.FloatField("latitude")
     longitude = models.FloatField("longitude")
     ainm = models.CharField("ainm", max_length=100)
-    route_num = models.CharField("self", max_length=50, default=0)
+    line_id = models.CharField("line_id", max_length=50, default=0)
     stop_num = models.CharField("stop_num", max_length=20, default=0)
     direction = models.CharField("direction", max_length=50, default="None")
 
@@ -34,7 +33,7 @@ class UniqueStops(models.Model):
 
 class UniqueRoutes(models.Model):
     id = models.CharField("id", max_length=20, default="None", primary_key=True)
-    route_num = models.CharField("route_num", max_length=10, default="None")
+    line_id = models.CharField("line_id", max_length=10, default="None")
     names = models.TextField("names", default="None")
     gach_ainm = models.TextField("gach_ainm", default="None")
     stops = models.TextField("outbound_stops", default="None")
@@ -42,8 +41,16 @@ class UniqueRoutes(models.Model):
     longitudes = models.TextField("longitudes", default="None")
     destination = models.CharField("destination", max_length=50, default="None")
     direction = models.CharField("direction", max_length=50, default="None")
+    first_departure_schedule = models.TextField("first_departure_schedule", default="None")
 
     def __str__(self):
         return self.id
 
+
+class StopSequencing(models.Model):
+    stop_num = models.CharField("id", max_length=10, default="None", primary_key=True)
+    stop_route_data = models.TextField("stop_route_data", default="None")
+
+    def __str__(self):
+        return self.id
 
