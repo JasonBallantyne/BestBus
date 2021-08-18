@@ -35,32 +35,34 @@ def weather_info():
 # new weather request function (old function did not get full forecast data,
 # and did not include rain, which is required for our models)
 def weather_forecast():
-  # get forecast
-  forecast = requests.get(weatherbitio)
   
-  # handle bad request, else process data
-  response = forecast.status_code
-  if response != 200:
-    raise ValueError("url not reached.")
-  else:
-    # convert to json
-    forecastData = forecast.json()
+    # get forecast
+    forecast = requests.get(weatherbitio)
 
-    # create a dictionary to return data
-    returnDict = {}
-    for i in forecastData["data"]:
-      # get local time for creating dict key, (key = "day from current" + "-" + "hour")
-      localTimestamp = i["timestamp_local"]
-      dayFromCurrent = str(int(localTimestamp.split("T")[0].split("-")[2]) - int(datetime.date(datetime.now()).strftime("%d")))
-      hourOfDay = localTimestamp.split("T")[1].split(":")[0]
-      key = dayFromCurrent + "-" + hourOfDay
-      
-      # get all required weather data, currently only require temperature, precipitation and weather desciption info
-      temp = i["temp"]
-      precip = i["precip"]
-      weather = i["weather"]
+    # handle bad request, else process data
+    response = forecast.status_code
+    if response != 200:
+        raise ValueError("url not reached.")
+    else:
+        # convert to json
+        forecast_data = forecast.json()
 
-      # now build dictionary entry
-      returnDict[key] = {'temp': temp, 'precip': precip, 'weather': weather}
+        # create a dictionary to return data
+        return_dict = {}
+        for i in forecast_data["data"]:
+            # get local time for creating dict key, (key = "day from current" + "-" + "hour")
+            local_timestamp = i["timestamp_local"]
+            day_from_current = str(
+                int(local_timestamp.split("T")[0].split("-")[2]) - int(datetime.date(datetime.now()).strftime("%d")))
+            hour_of_day = local_timestamp.split("T")[1].split(":")[0]
+            key = day_from_current + "-" + hour_of_day
 
-    return returnDict
+            # get all required weather data, currently only require temperature, precipitation and weather desciption info
+            temp = i["temp"]
+            precip = i["precip"]
+            weather = i["weather"]
+
+            # now build dictionary entry
+            return_dict[key] = {'temp': temp, 'precip': precip, 'weather': weather}
+
+        return return_dict

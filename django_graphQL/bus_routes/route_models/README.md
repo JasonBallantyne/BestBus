@@ -1,0 +1,1 @@
+Directories for random forest regressor models used in route predictions. The models return a whole route prediction, which is then subdivided in the back-end, depending on the request by the user (per route or per stop).
