@@ -13,12 +13,15 @@
 - Testing the accuracy of these models using statistical measurements (R2 Score, Mean absolute error and Root Mean Square Error).
 - Discussing our results and choosing a predictive model to carry out on the rest of our dataset.
 
-# Route Data
-- Parsing GTFS static data dump from transportforireland.ie
-
 # Random Forest Route
 - Functions to clean the dataframes.
 - Reading in the trips and weather data then passing them through cleaning functions.
 - Merging of the trips and weather dataframes.
 - Carrying out statistical measurements on the whole dataset and getting averages of each list (R2 Score, Mean absolute error and Root Mean Square Error).
 - Splitting merged dataframe on Line ID and Direction and carrying out Random Forest Modelling. 
+
+# Parsing All Routes
+- Parsing all of the routes from GTFS data dump contained on transportforireland.ie
+
+# Parsing Single Route
+- Parsing single route from GTFS data dump contained on transportforireland.ie
