@@ -5,10 +5,13 @@ import RealtimeTab from './pages/realtime/RealtimeTab'
 import RealtimeTabMobile from './pages/realtime/RealtimeTabMobile.jsx'
 import PlannerTab from './pages/planner/PlannerTab'
 import SettingsTab from './pages/settings/SettingsTab'
+import logo from '../images/icon.png'
 
 export default function EnglishApp(props) {
 
   const { passedState } = props;
+
+  console.log(logo);
 
   useEffect(() => {
     localStorage.setItem('language', '/en-ie')
@@ -21,19 +24,24 @@ export default function EnglishApp(props) {
     window.matchMedia("(min-width: 1000px)").addEventListener("change", (handler));
   }, [state]);
 
-  const app = {
-    marginTop: "4rem"
-  };
   const header = {
-    marginBottom: "2rem"
+    width: "40%",
+    height: "6rem",
+    margin: "2rem auto 3rem auto",
+    position: "relative",
+    gridTemplateColumns: "1fr 1fr"
   };
+   const headerItems = {
+     height: "4.5rem"
+   };
   
   return (
-    <div style={app}>
+    <div>
     {state.matches && (
       <div className="App">
-        <header className="App-header">
-          <h1 style={header}>Best Bus</h1>
+        <header className="App-header" style={header}>
+          <img src={logo} alt="Logo" style={headerItems}/>
+          <h1 style={headerItems}>Best Bus</h1>
         </header>
         <Tabs>
           <TabList>
@@ -56,8 +64,9 @@ export default function EnglishApp(props) {
     )}
     {!state.matches && (
       <div className="App">
-        <header className="App-header">
-          <h1>Best Bus</h1>
+        <header className="App-header" style={header}>
+          <img src={logo} alt="Logo" style={headerItems}/>
+          <h1 style={headerItems}>Best Bus</h1>
         </header>
         <Tabs>
           <TabList>

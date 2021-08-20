@@ -1,4 +1,5 @@
 import { useQuery, gql } from "@apollo/client";
+import CloseButton from 'react-bootstrap/CloseButton';
 
 const PREDICTIONS = gql`
   query StopPredictions ($stopNum: String!, $day: String!, $month: String!, $hour: String!, $minute: String!) {
@@ -11,20 +12,22 @@ export default function MapPin(props) {
   const { stopName, stopNum, markerColor, openPopup } = props;
 
   const table = {
-    border: '1px solid black',
+    border: '1px solid #4992bb',
     borderCollapse: 'collapse',
     margin: '0 0 0 3rem'
   };
 
   const tableHeader = {
-    backgroundColor: 'black',
-    color: 'white',
-    padding: '0.4rem 3.8rem 0.6rem 1rem',
+    backgroundColor: '#4992bb',
+    color: 'black',
+    padding: '0.4rem 3.8rem 0.6rem 0.7rem',
     textAlign: 'left',
     whiteSpace: 'nowrap'
   };
 
   const items = {
+    backgroundColor: 'white',
+    border: '1px solid #4992bb',
     padding: '0.25rem 3.8rem 0.4rem 1rem',
     textAlign: 'left',
     whiteSpace: 'nowrap'
@@ -78,23 +81,23 @@ export default function MapPin(props) {
     marginTop: "-3.65rem",
     borderLeft: "2rem solid transparent",
     borderRight: "2rem solid transparent",
-    borderTop: "3rem solid lightgrey",
+    borderTop: "3rem solid #fbc31c",
     position: "absolute",
     zIndex: "3"
   };
   var boxContainer = {
     display: "none",
-    backgroundColor: "lightgrey",
     marginLeft: "-8rem",
     marginTop: "-28rem",
     height: "25rem",
-    width: "30rem",
+    width: "33rem",
     position: "absolute",
     zIndex: "3",
-    borderRadius: "50px"
+    borderRadius: "20px",
+    backgroundColor: "#fbc31c"
   };
   const header = {
-    paddingTop: "0.5rem",
+    padding: "2rem 0 1rem 0",
     fontSize: "1.4rem",
     display: "grid",
     gridTemplateColumns: "5fr 1fr"
@@ -113,20 +116,20 @@ export default function MapPin(props) {
       marginTop: "-3.65rem",
       borderLeft: "2rem solid transparent",
       borderRight: "2rem solid transparent",
-      borderTop: "3rem solid lightgrey",
+      borderTop: "3rem solid #fbc31c",
       position: "absolute",
       zIndex: "3"
     };
     boxContainer = {
       display: "block",
-      backgroundColor: "lightgrey",
       marginLeft: "-8rem",
       marginTop: "-28rem",
       height: "25rem",
-      width: "30rem",
+      width: "33rem",
       position: "absolute",
       zIndex: "3",
-      borderRadius: "50px"
+      borderRadius: "20px",
+      backgroundColor: "#fbc31c"
     };
   }
 
@@ -175,7 +178,7 @@ export default function MapPin(props) {
         <div style={header}>
           <h3>{stopName}</h3>
           <div>
-            <p style={closeButton} onClick={() => togglePopup(stopName)}>X</p>
+            <CloseButton style={closeButton} onClick={() => togglePopup(stopName)}></CloseButton>
           </div>
         </div>
         {data

@@ -6,14 +6,15 @@ import { StationsContext } from "../contexts/stations"
 
 const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
 
+let defaultZoom = 12;
+let defaultCenter = {
+  lat: 53.34,
+  lng: -6.26
+};
+let zoom = defaultZoom;
+let center = defaultCenter;
+
 export default function SimpleMap(){
-  const defaultProps = {
-    center: {
-      lat: 53.34,
-      lng: -6.26
-    },
-    zoom: 12
-  };
 
   const [ state ] = useContext(StationsContext)
 
@@ -23,11 +24,11 @@ export default function SimpleMap(){
   const header = {
     position: 'absolute',
     zIndex: '2',
-    backgroundColor: 'white',
+    backgroundColor: '#4992bb',
     marginTop: '2.5rem',
     marginLeft: '5rem',
     borderRadius: '1rem',
-    padding: '0 1.5rem'
+    padding: '0.5rem 2rem'
   };
 
   function closePopups() {
@@ -44,6 +45,8 @@ export default function SimpleMap(){
 
   if (state) {
     if (state[0].length > 1) {
+      center = defaultCenter;
+      zoom = defaultZoom;
       state[0].forEach((stop, idx, array) => {
         if (idx === 0) {
           pins.push(
@@ -97,6 +100,11 @@ export default function SimpleMap(){
       });
       title = <div style={header}><h1>Route: {state[0][0].lineId} ({state[0][0].direction})</h1></div>
     } else {
+      center = {
+        lat: state[0].latitude+0.02,
+        lng: state[0].longitude+0.02
+      };
+      zoom = 13;
       pins.push(
         <MapPinStop
           key={state[0].stopNum}
@@ -120,8 +128,8 @@ export default function SimpleMap(){
       {title}
       <GoogleMapReact
         bootstrapURLKeys={{ key: GOOGLE_API_KEY }}
-        defaultCenter={defaultProps.center}
-        defaultZoom={defaultProps.zoom}
+        center={center}
+        zoom={zoom}
         yesIWantToUseGoogleMapApiInternals
         onClick={() => closePopups()}
       >

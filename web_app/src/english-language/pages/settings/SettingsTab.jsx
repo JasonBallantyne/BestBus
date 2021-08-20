@@ -2,13 +2,20 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 function SettingsTab() {
   const container = {
-    margin: "4rem 0 0 0",
+    margin: "4rem 0 0 0"
   };
   const feature = {
-    margin: "4rem 0",
+    margin: "5rem auto",
+    width: "70%",
+    padding: "3rem 3rem",
+    backgroundColor: '#fbc31c',
+    borderRadius: "1rem",
+  };
+  const dropdown = {
+    backgroundColor: '#4992bb',
   };
   function changeLanguage() {
-    localStorage.setItem('language', '/ga-ie')
+    localStorage.setItem('language', '/en-ie')
   };
   return(
     <div style={container}>
@@ -16,11 +23,11 @@ function SettingsTab() {
         <h3>Choose Language:</h3>
         <p>Choose between English or Gaeilge</p>
         <Dropdown>
-          <Dropdown.Toggle id="dropdown-button-dark-example1" variant="secondary">
+          <Dropdown.Toggle id="dropdown-button-dark-example1" variant="secondary" style={dropdown}>
             Language
           </Dropdown.Toggle>
 
-          <Dropdown.Menu variant="dark">
+          <Dropdown.Menu variant="dark" style={dropdown}>
             <Dropdown.Item active>English</Dropdown.Item>
             <Dropdown.Item onClick={changeLanguage()} href="/ga-ie">Gaeilge</Dropdown.Item>
           </Dropdown.Menu>
