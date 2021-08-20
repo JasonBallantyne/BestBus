@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'customers',
     'bus_routes',
     'graphene_django',
     'corsheaders',
@@ -126,5 +125,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 GRAPHENE = {
-    'SCHEMA': 'customers.schema.schema'
+    'SCHEMA': 'uniqueroutes.schema.schema'
 }

@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import BusRoute
+from .models import UniqueRoutes
 
-admin.site.register(BusRoute)
+admin.site.register(UniqueRoutes)

@@ -2,8 +2,11 @@
 def agus_ainm(row, first_list, filtered_list):
     if row['stop_id'] in filtered_list:
         item = first_list[filtered_list.index(row['stop_id'])]
+        if item[1] == "":
+            print("no name")
         print(item[1])
         return item[1]
+
 
 
 # function to find and match the row with its correct customer facing route number
@@ -205,15 +208,59 @@ def all_routes(row, df, pruned_df):
             if stop > route_length:
                 route_length = stop
 
-        # print("line length: ", route_length)
         filtered_df = df[df["line_id"] == line]
         sequence = filtered_df["stop_sequence"].unique().tolist()[0]
         destination = filtered_df["destination"].unique().tolist()[0]
         direction = filtered_df["direction"].unique().tolist()[0]
-        # print("sequence: ", sequence)
         divisor = round(route_length / sequence, 2)
 
         return_list.append(f"[{line}, {divisor}, {direction}, {destination}]")
 
     return_list = ", ".join(return_list)
     return return_list
+
+
+def agus_ceann_scribe(row, df):
+    name = row["destination"]
+    name_df = df[df["name"] == name]
+    ainm = name_df["ainm"].unique().tolist()
+    if len(ainm) == 0:
+        return name
+    else:
+        return ainm[0]
+
+
+def longest_shapes(line, merged_df):
+    print("processing line: ", line)
+    temp_df = merged_df[merged_df["line_id"] == line]
+    shapes = temp_df["shape_id"].unique().tolist()
+    # iterate over each of the shapes and split into outbound and inbound
+    inbound_shapes = []
+    outbound_shapes = []
+    for shape in shapes:
+        direction = shape.split('.')[2]
+        if direction == "O":
+            outbound_shapes.append(shape)
+        if direction == "I":
+            inbound_shapes.append(shape)
+
+    # get the longest inbound and longest outbound
+    longest_outbound = ""
+    longest_length_outbound = 0
+    for shape in outbound_shapes:
+        temp = merged_df[merged_df["shape_id"] == shape]
+        temp = temp.drop_duplicates(subset=["stop_sequence"], keep='first')
+        if temp.shape[0] > longest_length_outbound:
+            longest_length_outbound = temp.shape[0]
+            longest_outbound = shape
+
+    longest_inbound = ""
+    longest_length_inbound = 0
+    for shape in inbound_shapes:
+        temp = merged_df[merged_df["shape_id"] == shape]
+        temp = temp.drop_duplicates(subset=["stop_sequence"], keep='first')
+        if temp.shape[0] > longest_length_inbound:
+            longest_length_inbound = temp.shape[0]
+            longest_inbound = shape
+
+    return longest_outbound, longest_inbound

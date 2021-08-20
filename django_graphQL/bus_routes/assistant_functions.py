@@ -2,6 +2,7 @@ import datetime
 import pytz
 from .schema import *
 import pickle
+from .apis import time_data
 
 
 def seconds_to_timestamp(time_in_seconds):
@@ -10,10 +11,10 @@ def seconds_to_timestamp(time_in_seconds):
     minute = str(int(remainder % 60))
     hour = str(int(remainder // 60))
 
-    return correcting_midnight(leading_0_timestamp(hour, minute, second))
+    return correcting_midnight(units_to_timestamp(hour, minute, second))
 
 
-def leading_0_timestamp(hour, minute, second):
+def units_to_timestamp(hour, minute, second):
     # eliminate single digits in timestamp
     if len(hour) == 1:
         hour = f"0{hour}"
@@ -61,12 +62,13 @@ def departure_times(route, direction):
 
 
 def return_weather(weather, time, current_day):
+    current_time = time_data.time_data()
     hour = time.split(":")[0].strip("0")
     key = str(current_day) + "-" + hour
     if key in weather:
         hourly_weather = weather[key]
     else:
-        current = "0-" + str(datetime.datetime.now().hour + 2)
+        current = "0-" + str(int(current_time.split(":")[0] + 1))
         hourly_weather = weather[current]
 
     rain = hourly_weather["precip"]
@@ -97,7 +99,7 @@ def correcting_midnight(time):
         hour = int(time_units[0]) - 24
     else:
         hour = int(time_units[0])
-    timestamp = leading_0_timestamp(str(hour), time_units[1], time_units[2])
+    timestamp = units_to_timestamp(str(hour), time_units[1], time_units[2])
     return timestamp
 
 
@@ -147,26 +149,6 @@ def return_models(routes):
         else:
             pass
     return models
-
-
-def return_arrival_times(all_arrival_times, hour, list_size, minute):
-    # return dictionary of arrival times
-    next_arrival_times = {}
-    for i in all_arrival_times:
-        next_times = []
-        for j in all_arrival_times[i]:
-            if len(next_times) < list_size:
-                if len(j.split(':')[2]) == 2:
-                    if int(hour) <= int(j.split(':')[0]):
-                        if int(hour) == int(j.split(':')[0]) and int(minute) > int(j.split(':')[1]):
-                            pass
-                        else:
-                            next_times.append(j)
-                else:
-                    next_times.append(j)
-
-        next_arrival_times[i] = next_times
-        return next_arrival_times
 
 
 def return_journey_time_and_key(day, hour, key, month, rain, temp):
@@ -230,3 +212,31 @@ def before_or_after_midnight(times_list):
             before_midnight.append(time)
 
     return before_midnight, after_midnight
+
+
+def return_travel_times(all_departure_times, day, model, month, weather):
+    all_travel_times = []
+    current_day = 0
+    current_time = time_data.time_data()
+
+    for i in all_departure_times:
+        hr = i.split(":")[0]
+        key = str(current_day) + "-" + hr
+        if key in weather:
+            hourly_weather = weather[key]
+        else:
+            hourly_weather = weather["0-" + str(int(current_time.split(":")[0]) + 1)]
+        rain = hourly_weather["precip"]
+        temp = hourly_weather["temp"]
+        all_travel_times.append("0_" + str(model.predict([[day, hr, month, rain, temp]])[0]))
+
+    # if number of stops listed is less than 'list_size', get stops from next day
+    current_day = 1
+    for i in all_departure_times:
+        hr = i.split(":")[0]
+        key = str(current_day) + "-" + hr
+        hourly_weather = weather[key]
+        rain = hourly_weather["precip"]
+        temp = hourly_weather["temp"]
+        all_travel_times.append("1_" + str(model.predict([[day, hr, month, rain, temp]])[0]))
+    return all_travel_times

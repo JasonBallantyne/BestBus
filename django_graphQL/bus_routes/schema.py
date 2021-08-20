@@ -1,12 +1,9 @@
-import itertools
-
 import graphene
 from .types import *
-from .weather import weather_parser
+from .apis import weather_parser
 import pickle
 import os
 from .assistant_functions import *
-import datetime
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -62,18 +59,15 @@ class Query(graphene.ObjectType):
             if route.line_id == line_id and route.direction == direction:
                 return route
 
-    def resolve_all_bus_routes(root, info):
-        return BusRoute.objects.all()
-
     def resolve_prediction(root, info, route, direction, day, hour, minute, month, list_size):
         # get relevant models pickle file
         model = pickle.load(open(f'./bus_routes/route_models/{direction}/RandForest_{route}.pkl', 'rb'))
 
         # get all departure times for route
-        allDepartureTimes = []
+        all_departure_times = []
         for i in UniqueRoutes.objects.all():
             if i.line_id == route and i.direction == direction:
-                allDepartureTimes = [x.strip() for x in i.first_departure_schedule.split(',')]
+                all_departure_times = [x.strip() for x in i.first_departure_schedule.split(',')]
 
         # get weather
         weather = weather_parser.weather_forecast()
@@ -83,91 +77,55 @@ class Query(graphene.ObjectType):
         so buses that have already departed don't have a corresponding weather object.
         this shouldn't be too much of an issue as i will use the closest weather object, 
         which will only be max 2 hrs off, but should revisit if have time'''
-        allTravelTimes = []
-        currentDay = 0
-        for i in allDepartureTimes:
-            hr = i.split(":")[0]
-            key = str(currentDay) + "-" + hr
-            if key in weather:
-                hourlyWeather = weather[key]
-            else:
-                hourlyWeather = weather["0-" + str(datetime.datetime.now().hour + 1)]
-            rain = hourlyWeather["precip"]
-            temp = hourlyWeather["temp"]
-            allTravelTimes.append("0_" + str(model.predict([[day, hr, month, rain, temp]])[0]))
-
-        # if number of stops listed is less than 'list_size', get stops from next day
-        currentDay = 1
-        for i in allDepartureTimes:
-            hr = i.split(":")[0]
-            key = str(currentDay) + "-" + hr
-            hourlyWeather = weather[key]
-            rain = hourlyWeather["precip"]
-            temp = hourlyWeather["temp"]
-            allTravelTimes.append("1_" + str(model.predict([[day, hr, month, rain, temp]])[0]))
+        all_travel_times = return_travel_times(all_departure_times, day, model, month, weather)
 
         # predict each arrival time at chosen stop
-        allStops = [x.strip() for x in Query.resolve_stops_on_route(root, info, route, direction).stops.split(",")]
-        numStops = len(allStops)
+        all_stops = [x.strip() for x in Query.resolve_stops_on_route(root, info, route, direction).stops.split(",")]
+        num_stops = len(all_stops)
         position = 0
-        allArrivalTimes = {}
-        for i in allStops:
+        all_arrival_times = {}
+        for i in all_stops:
             x = 0
-            arrivalTimesForStop = []
-            for j in allTravelTimes:
+            arrival_times_for_stop = []
+            for j in all_travel_times:
                 day = j.split("_")[0]
                 time = float(j.split("_")[1])
-                timeDep = allDepartureTimes[x].split(':')
-                departureTimeInSeconds = int(timeDep[0]) * 60 * 60 + int(timeDep[1]) * 60 + int(timeDep[2])
-                travelTimeToStopInSeconds = (time / numStops) * position
-                arrivalTimeInSeconds = (departureTimeInSeconds + travelTimeToStopInSeconds)
-
-                arrivalSecond = str(int(arrivalTimeInSeconds % 60))
-                remainder = arrivalTimeInSeconds // 60
-                arrivalMinute = str(int(remainder % 60))
-                arrivalHour = str(int(remainder // 60))
-
-                # elimindate single digits in timestamp
-                if len(arrivalHour) == 1:
-                    arrivalHour = f"0{arrivalHour}"
-                if len(arrivalMinute) == 1:
-                    arrivalMinute = f"0{arrivalMinute}"
-                if len(arrivalSecond) == 1:
-                    arrivalSecond = f"0{arrivalSecond}"
+                time_dep = all_departure_times[x].split(':')
+                departure_time_in_seconds = int(time_dep[0]) * 60 * 60 + int(time_dep[1]) * 60 + int(time_dep[2])
+                travel_time_to_stop_in_seconds = (time / num_stops) * position
+                arrival_time_in_seconds = (departure_time_in_seconds + travel_time_to_stop_in_seconds)
+                arrival_time = seconds_to_timestamp(arrival_time_in_seconds)
 
                 if day == "1":
-                    arrivalTime = arrivalHour + ":" + arrivalMinute + ":" + arrivalSecond + " (tomorrow)"
-                else:
-                    arrivalTime = arrivalHour + ":" + arrivalMinute + ":" + arrivalSecond
+                    arrival_time = arrival_time + " (tomorrow)"
 
                 x += 1
-                if x > len(allDepartureTimes) - 1:
+                if x > len(all_departure_times) - 1:
                     x = 0
 
-                arrivalTimesForStop.append(arrivalTime)
+                arrival_times_for_stop.append(arrival_time)
 
-            allArrivalTimes[i] = arrivalTimesForStop
+            all_arrival_times[i] = arrival_times_for_stop
             position += 1
 
         # get next x arriving buses, x being provided as "list_size"
-        nextArrivalTimes = {}
-        for i in allArrivalTimes:
-            nextTimes = []
-            for j in allArrivalTimes[i]:
-                if len(nextTimes) < list_size:
+        next_arrival_times = {}
+        for i in all_arrival_times:
+            next_times = []
+            for j in all_arrival_times[i]:
+                if len(next_times) < list_size:
                     if len(j.split(':')[2]) == 2:
                         if int(hour) <= int(j.split(':')[0]):
                             if int(hour) == int(j.split(':')[0]) and int(minute) > int(j.split(':')[1]):
                                 pass
                             else:
-                                nextTimes.append(j)
+                                next_times.append(j)
                     else:
-                        nextTimes.append(j)
+                        next_times.append(j)
 
-            nextArrivalTimes[i] = nextTimes
+            next_arrival_times[i] = next_times
 
-        # return data
-        return str(nextArrivalTimes)
+        return str(next_arrival_times)
 
     def resolve_stop_predictions(self, info, stop_num, day, hour, minute, month, list_size):
         # get all routes through given stop
@@ -183,12 +141,11 @@ class Query(graphene.ObjectType):
         '''we could choose to iterate over all the times and get weather 
         predictions for all, but it seems wasteful...
         let's take the current time for now'''
-        rain = 0.5
-        temp = 15
+
         current_day = 0
-        # time = seconds_to_timestamp(unit_to_seconds(hour, minute))
-        # weather = weather_parser.weather_forecast()
-        # rain, temp = return_weather(weather, time, current_day)
+        time = seconds_to_timestamp(unit_to_seconds(hour, minute))
+        weather = weather_parser.weather_forecast()
+        rain, temp = return_weather(weather, time, current_day)
 
         # get a list of all predictions
         predictions = []
@@ -221,7 +178,7 @@ class Query(graphene.ObjectType):
                     output.append(time + " (tomorrow)")
 
             output = ", ".join(str(elem) for elem in output[:list_size])
-            print(output)
+
             return output
 
         return "No buses available."

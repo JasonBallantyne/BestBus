@@ -11,6 +11,7 @@ import GaeilgeApp from './gaeilge-language/GaeilgeApp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 let language = null;
+
 class App extends Component {
   constructor(props) {
     super(props)

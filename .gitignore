@@ -2,8 +2,7 @@
 *.pyc
 django_graphQL/gtfs_data/gtfs_datafiles/
 django_graphQL/bus_routes/migrations
-django_graphQL/bus_routes/weather/weather_config.py
+django_graphQL/bus_routes/apis/weather_config.py
 django_graphQL/gtfs_data/api_config.py
 django_graphQL/bus_routes/live_data/api_config.py
 web_app/.env
-django_graphQL/db.sqlite3
