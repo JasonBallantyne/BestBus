@@ -2,7 +2,7 @@ import { useQuery, gql } from "@apollo/client";
 import { useContext, useState, useEffect } from "react";
 import { StationsContext } from "../contexts/stations";
 import CloseButton from 'react-bootstrap/CloseButton';
-import { MdDelete } from "react-icons/md";
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const STOPS = gql`
   query {
@@ -80,31 +80,22 @@ function  StopsDropdown() {
 
   const container = {
     width: "13vw",
-    minWidth: "11rem",
+    minWidth: "15rem",
   };
-  const buttonContainer = {
-    height: "10rem"
+  const input = {
+    width: "13vw",
+    margin: "1rem 1rem 1rem 0"
   };
-  const favouriteDiv = {
+  const item = {
     display: "grid",
-    gridTemplateColumns: "5fr 1fr"
+    gridTemplateColumns: "10fr 1fr"
   };
-  const favouritesButton = {
-    display: "block",
-    width: "100%",
-    height: "2rem",
-    margin: "3% 0",
-    backgroundColor: "grey"
+  const favourite = {
+    backgroundColor: "#4992bb"
   };
   const removeButton = {
-    height: "2rem",
-    margin: "14% 0"
-  }
-  const button = {
-    display: "block",
-    width: "100%",
-    height: "2rem",
-    margin: "3% 0"
+    padding: "0.7rem",
+    marginRight: "-3rem"
   };
 
   if (loading) return <p>Loading...</p>;
@@ -112,12 +103,12 @@ function  StopsDropdown() {
 
   return (
     <div style={container}>
-      <h3>Choose a Stop</h3>
-      <input type="text" placeholder="Search by stop number" onChange={event => {setStopSearch(event.target.value)}} />
-      <div style={buttonContainer}>
+      <h3>Search By Stop</h3>
+      <input  style={input} type="text" placeholder="stop number" onChange={event => {setStopSearch(event.target.value)}} />
+      <ListGroup>
         {favourites.map((stop) => {
           return (
-            <div style={favouriteDiv} key={"favdiv-" + stop.stopNum}><input type="button" style={favouritesButton} key={"favinput-" + stop.stopNum} value={stop.stopNum} onClick={ () => {chooseStop(stop)}}></input><CloseButton onClick={() => {removeFromStopFavourites(stop)}} style={removeButton}><MdDelete/></CloseButton></div>
+            <div style={item} key={"favdiv-" + stop.stopNum}><ListGroup.Item style={favourite} action onClick={() => {chooseStop(stop)}}>{stop.stopNum}</ListGroup.Item><CloseButton style={removeButton} onClick={() => {removeFromStopFavourites(stop)}}></CloseButton></div>
           )
         })}
         { data.uniqueStops.filter((val)=> {
@@ -130,10 +121,10 @@ function  StopsDropdown() {
           }
         }).slice(0, 8-favourites.length).map((stop) => {
           return (
-            <input type="button" style={button} key={stop.stopNum} value={stop.stopNum} onClick={ () => {chooseStop(stop)}}></input>
+            <div style={item} key={stop.stopNum}><ListGroup.Item action onClick={() => {chooseStop(stop)}}>{stop.stopNum}</ListGroup.Item></div>
           )
         })}
-      </div>
+      </ListGroup>
     </div>
   )
 }

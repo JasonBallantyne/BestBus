@@ -7,35 +7,34 @@ function RealtimeTab() {
   const content = {
     display: "grid",
     margin: "5rem 3rem",
-    gridTemplateRows: "1fr 2fr"
+    gridTemplateColumns: "1fr 2fr"
   };
   const dropdownsContainer = {
-    background: "lightgrey",
     gridColumnStart: "1",
     gridColumnEnd: "2",
-    margin: "3rem",
+    margin: "0 0 0 3rem",
+    paddingTop: "2rem",
     display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    height: "500px"
+    gridTemplateRows: "1fr 1fr",
+    justifyContent: "center",
+    height: "1100px",
+    borderRadius: "1rem",
+    backgroundColor: "#fbc31c"
   };
   const stopsDropdownContainer  = {
-    margin: "3rem 5rem"
+    margin: "1rem 3rem"
   };
   const routesDropdownContainer  = {
-    margin: "3rem"
+    margin: "1rem 3rem"
   };
   const mapContainer = {
-    background: "lightgrey",
-    gridColumnStart: "1",
-    gridColumnEnd: "2",
+    gridColumnStart: "2",
+    gridColumnEnd: "3",
     margin: "0 3rem"
   };
   return(
     <StationsProvider>
       <div style={content}>
-        <div style={mapContainer}>
-          <GoogleMap />
-        </div>
         <div style={dropdownsContainer}>
           <div style={stopsDropdownContainer}>
             <StopsDropdown />
@@ -44,8 +43,11 @@ function RealtimeTab() {
             <RoutesDropdown />
           </div>
         </div>
+        <div style={mapContainer}>
+          <GoogleMap />
+        </div>
       </div>
-    </StationsProvider>
+      </StationsProvider>
   )
 }
 

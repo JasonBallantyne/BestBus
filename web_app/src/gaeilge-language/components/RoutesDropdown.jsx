@@ -2,7 +2,7 @@ import { useQuery, gql } from "@apollo/client";
 import { useContext, useState, useEffect } from "react";
 import { StationsContext } from "../contexts/stations";
 import CloseButton from 'react-bootstrap/CloseButton';
-import { MdDelete } from "react-icons/md";
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const ROUTES = gql`
   query {
@@ -99,44 +99,39 @@ function  RoutesDropdown() {
 
     // iterate through gtfs_data and add to organised list
     for (let i = 0; i < stopNums.length; i++) {
-      let newStop = {"lineId": route.lineId, "direction": route.direction, "destination": route.destination,
+      let gaeilgeDirection;
+      if (route.direction === "inbound") {
+        gaeilgeDirection = "isteach"
+      } else {
+        gaeilgeDirection = "amach"
+      }
+      let newStop = {"lineId": route.lineId, "direction": route.direction, "gaeilgeDirection": gaeilgeDirection, "destination": route.destination,
       "longitude": longitudes[i].trim(), "latitude": latitudes[i].trim(), "stopName": stopNames[i].trim(), "stopNum": stopNums[i].trim(),
       "irishName": irishNames[i].trim(), "departureSchedule": route.firstDepartureSchedule};
       routeOrganised.push(newStop)
     }
-
-    // console.log(routeOrganised)
 
     dispatch({type: "update_stations", payload: [routeOrganised]})
   }
 
   const container = {
     width: "13vw",
-    minWidth: "11rem",
+    minWidth: "15rem"
   };
-  const buttonContainer = {
-    height: "10rem"
+  const input = {
+    width: "13vw",
+    margin: "1rem 1rem 1rem 0"
   };
-  const favouriteDiv = {
+  const item = {
     display: "grid",
-    gridTemplateColumns: "5fr 1fr"
+    gridTemplateColumns: "10fr 1fr"
   };
-  const favouritesButton = {
-    display: "block",
-    width: "100%",
-    height: "2rem",
-    margin: "3% 0",
-    backgroundColor: "grey"
+  const favourite = {
+    backgroundColor: "#4992bb"
   };
   const removeButton = {
-    height: "2rem",
-    margin: "14% 0"
-  }
-  const button = {
-    display: "block",
-    width: "100%",
-    height: "2rem",
-    margin: "3% 0"
+    padding: "0.7rem",
+    marginRight: "-3rem"
   };
 
   if (loading) return <p>Loading...</p>;
@@ -144,12 +139,18 @@ function  RoutesDropdown() {
 
   return (
     <div style={container}>
-      <h3>Choose a Route</h3>
-      <input type="text" placeholder="Search by route number" onChange={event => {setRouteSearch(event.target.value)}} />
-      <div style={buttonContainer}>
+      <h3>Cuardaigh le Slí</h3>
+      <input style={input} type="text" placeholder="uimhir slí" onChange={event => {setRouteSearch(event.target.value)}} />
+      <ListGroup>
         {favourites.map((route) => {
+          let gaeilgeDirection;
+          if (route.direction === "inbound") {
+            gaeilgeDirection = "isteach"
+          } else {
+            gaeilgeDirection = "amach"
+          }
           return (
-            <div style={favouriteDiv} key={"favdiv-" + route.lineId + "-" + route.direction}><input type="button" style={favouritesButton} key={"favinput-" + route.lineId + "-" + route.direction} value={route.lineId + " (" + route.direction + ")"} onClick={ () => {chooseRoute(route)}}></input><CloseButton onClick={() => {removeFromRouteFavourites(route)}} style={removeButton}><MdDelete/></CloseButton></div>
+            <div style={item} key={"favdiv-" + route.lineId + "-" + gaeilgeDirection}><ListGroup.Item style={favourite} action onClick={() => {chooseRoute(route)}}>{route.lineId} ({gaeilgeDirection})</ListGroup.Item><CloseButton style={removeButton} onClick={() => {removeFromRouteFavourites(route)}}></CloseButton></div>
           )
         })}
         { data.uniqueRoutes.filter((val)=> {
@@ -161,11 +162,17 @@ function  RoutesDropdown() {
             return null
           }
         }).slice(0, 8-favourites.length).map((route) => {
+          let gaeilgeDirection;
+          if (route.direction === "inbound") {
+            gaeilgeDirection = "isteach"
+          } else {
+            gaeilgeDirection = "amach"
+          }
           return (
-            <input type="button" style={button} key={route.lineId + "-" + route.direction} value={route.lineId + " (" + route.direction + ")"} onClick={ () => {chooseRoute(route)}}></input>
+            <div style={item} key={route.lineId + "-" + gaeilgeDirection}><ListGroup.Item action onClick={() => {chooseRoute(route)}}>{route.lineId} ({gaeilgeDirection})</ListGroup.Item></div>
           )
         })}
-      </div>
+      </ListGroup>
     </div>
   )
 }
