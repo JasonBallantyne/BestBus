@@ -18,8 +18,6 @@ export default function MapPin(props) {
     name = stopName;
   }
 
-  console.log(irishName)
-
   const table = {
     border: '1px solid #4992bb',
     borderCollapse: 'collapse',
