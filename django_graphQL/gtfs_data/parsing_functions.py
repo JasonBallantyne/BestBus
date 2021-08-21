@@ -200,7 +200,6 @@ def all_routes(row, df, pruned_df):
 
     return_list = []
     for line in all_lines_for_stop:
-        # print(f"----{line}----")
         line_df = pruned_df[pruned_df["line_id"] == line]
         all_stops_seqs = line_df["stop_sequence"].unique().tolist()
         route_length = 0
@@ -212,9 +211,10 @@ def all_routes(row, df, pruned_df):
         sequence = filtered_df["stop_sequence"].unique().tolist()[0]
         destination = filtered_df["destination"].unique().tolist()[0]
         direction = filtered_df["direction"].unique().tolist()[0]
+        ceann_scribe = filtered_df["ceann_scribe"].unique().tolist()[0]
         divisor = round(route_length / sequence, 2)
 
-        return_list.append(f"[{line}, {divisor}, {direction}, {destination}]")
+        return_list.append(f"[{line}, {divisor}, {direction}, {destination}, {ceann_scribe}]")
 
     return_list = ", ".join(return_list)
     return return_list

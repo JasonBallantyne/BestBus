@@ -55,6 +55,7 @@ export default function SimpleMap(){
               lineId={stop.lineId}
               direction={stop.direction}
               destination={stop.destination}
+              ceannScribe={stop.ceannScribe}
               lng={stop.longitude}
               lat={stop.latitude}
               stopName={stop.stopName}
@@ -71,6 +72,7 @@ export default function SimpleMap(){
               lineId={stop.lineId}
               direction={stop.direction}
               destination={stop.destination}
+              ceannScribe={stop.ceannScribe}
               lng={stop.longitude}
               lat={stop.latitude}
               stopName={stop.stopName}
@@ -87,6 +89,7 @@ export default function SimpleMap(){
               lineId={stop.lineId}
               direction={stop.direction}
               destination={stop.destination}
+              ceannScribe={stop.ceannScribe}
               lng={stop.longitude}
               lat={stop.latitude}
               stopName={stop.stopName}

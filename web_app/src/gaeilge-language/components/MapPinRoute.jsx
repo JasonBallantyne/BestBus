@@ -9,7 +9,7 @@ const PREDICTIONS = gql`
 
 export default function MapPin(props) {
 
-  const { lineId, direction, destination, irishName, stopNum, markerColor, openPopup } = props;
+  const { lineId, direction, ceannScribe, irishName, stopNum, markerColor, openPopup } = props;
 
   const table = {
     border: '1px solid #4992bb',
@@ -189,8 +189,8 @@ export default function MapPin(props) {
               </thead>
               <tbody>
                 {prediction.map((val) => (
-                  <tr key={destination+val}>
-                    <td style={items}>{destination}</td>
+                  <tr key={ceannScribe+val}>
+                    <td style={items}>{ceannScribe}</td>
                     <td style={items}>{val}</td>
                   </tr>
                 ))}

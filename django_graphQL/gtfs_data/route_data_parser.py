@@ -152,7 +152,7 @@ for stop in all_stops:
     stop_sequencing = stop_sequencing.append(stop_df)
     count += 1
 
-stop_sequencing = stop_sequencing.drop(["line_id", "stop_sequence", "direction", "destination"], axis=1)
+stop_sequencing = stop_sequencing.drop(["line_id", "stop_sequence", "direction", "destination", "ceann_scribe"], axis=1)
 stop_sequencing = stop_sequencing.drop_duplicates()
 
 print("Complete. Loading to database now.")

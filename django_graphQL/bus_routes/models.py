@@ -35,5 +35,5 @@ class StopSequencing(models.Model):
     stop_route_data = models.TextField("stop_route_data", default="None")
 
     def __str__(self):
-        return self.id
+        return self.stop_num
 

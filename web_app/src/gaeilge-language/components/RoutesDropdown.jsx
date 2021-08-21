@@ -11,6 +11,7 @@ const ROUTES = gql`
         lineId
         direction
         destination
+        ceannScribe
         longitudes
         latitudes
         names
@@ -105,7 +106,7 @@ function  RoutesDropdown() {
       } else {
         gaeilgeDirection = "amach"
       }
-      let newStop = {"lineId": route.lineId, "direction": route.direction, "gaeilgeDirection": gaeilgeDirection, "destination": route.destination,
+      let newStop = {"lineId": route.lineId, "direction": route.direction, "gaeilgeDirection": gaeilgeDirection, "ceannScribe": route.ceannScribe, "destination": route.destination,
       "longitude": longitudes[i].trim(), "latitude": latitudes[i].trim(), "stopName": stopNames[i].trim(), "stopNum": stopNums[i].trim(),
       "irishName": irishNames[i].trim(), "departureSchedule": route.firstDepartureSchedule};
       routeOrganised.push(newStop)

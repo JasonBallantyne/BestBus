@@ -27,7 +27,7 @@ def units_to_timestamp(hour, minute, second):
 
 def unit_to_seconds(hour, minute):
     ftr = [3600, 60, 1]
-    total_secs = (int(hour) * ftr[0]) + (int(minute[1]) * ftr[1])
+    total_secs = (int(hour) * ftr[0]) + (int(minute) * ftr[1])
 
     return total_secs
 
@@ -68,7 +68,11 @@ def return_weather(weather, time, current_day):
     if key in weather:
         hourly_weather = weather[key]
     else:
-        current = "0-" + str(int(current_time.split(":")[0] + 1))
+        hr = str(int(current_time.split(":")[0]) + 1)
+        if (len(hr) == 1):
+          current = "0-0" + str(int(current_time.split(":")[0]) + 1)
+        else:
+          current = "0-" + str(int(current_time.split(":")[0]) + 1)
         hourly_weather = weather[current]
 
     rain = hourly_weather["precip"]
@@ -81,7 +85,7 @@ def data_and_direction(stop_num):
     remove_chars = ["[", "]"]
 
     for item in StopSequencing.objects.all():
-        if item.stop_num == stop_num:
+        if str(item) == stop_num:
             stop_data = item.stop_route_data
             stop_data = stop_data.split("], [")
             for character in remove_chars:
@@ -127,7 +131,7 @@ def return_departure_times(models):
             if key == line_id:
                 destination = value[1]
                 divisor = value[2]
-                key_string = f"{line_id}_{destination}_{divisor}"
+                key_string = f"{line_id}_{destination}_{divisor}_{value[3]}"
                 all_departure_times[key_string] = [x.strip() for x in i.first_departure_schedule.split(',')]
     return all_departure_times
 
@@ -140,12 +144,13 @@ def return_models(routes):
         divisor = float(info[1])
         direction = info[2]
         destination = info[3]
+        ceann_scribe = info[4]
         exists = os.path.isfile(f'./bus_routes/route_models/{direction}/RandForest_{route}.pkl')
         if exists:
             models[route + "_" + direction] = [pickle.load(open(f'.'
                                                                 f'/bus_routes/route_models'
                                                                 f'/{direction}/RandForest_{route}'
-                                                                f'.pkl', "rb")), destination, divisor]
+                                                                f'.pkl', "rb")), destination, divisor, ceann_scribe]
         else:
             pass
     return models
@@ -156,7 +161,9 @@ def return_journey_time_and_key(day, hour, key, month, rain, temp):
     route = str(route_info[0])
     direction = str(route_info[1])
     destination = str(route_info[2])
-    new_key = route + "_" + direction + "_" + destination
+    ceann_scribe = str(route_info[4])
+
+    new_key = route + "_" + direction + "_" + destination + "_" + ceann_scribe
     divisor = float(route_info[3])
     model = pickle.load(open(f'./bus_routes/route_models/{direction}/RandForest_{route}.pkl', "rb"))
     prediction = model.predict([[day, hour, month, rain, temp]])[0]
@@ -176,6 +183,7 @@ def predictions_list(all_departure_times, day, hour, minute, month, rain, temp, 
     # predict travel time for each routes departure to chosen stop
     for key, value in all_departure_times.items():
         new_key, predicted_journey_time = return_journey_time_and_key(day, hour, key, month, rain, temp)
+
         # assessment for times in the past, or if tomorrow
         for item in value:
             cut_off_time, predicted_time = return_cut_off_and_predicted_times(hour, item, minute,
