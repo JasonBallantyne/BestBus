@@ -194,8 +194,8 @@ export default function MapPin(props) {
                 {prediction.map((val) => (
                   <tr key={val}>
                     <td style={items}>{val.split("_")[0]}</td>
-                    <td style={items}>{val.split("_")[1]}</td>
-                    <td style={items}>{val.split("_")[3]}</td>
+                    <td style={items}>{val.split("_")[2]}</td>
+                    <td style={items}>{val.split("_")[4]}</td>
                   </tr>
                 ))}
               </tbody>
