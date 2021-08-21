@@ -11,6 +11,7 @@ const STOPS = gql`
         stopNum
         latitude
         longitude
+        ainm
     }
   }
 `;

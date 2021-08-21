@@ -9,7 +9,16 @@ const PREDICTIONS = gql`
 
 export default function MapPin(props) {
 
-  const { stopName, stopNum, markerColor, openPopup } = props;
+  const { stopName, irishName, stopNum, markerColor, openPopup } = props;
+  let name;
+
+  if (irishName) {
+    name = irishName;
+  } else {
+    name = stopName;
+  }
+
+  console.log(irishName)
 
   const table = {
     border: '1px solid #4992bb',
@@ -162,23 +171,23 @@ export default function MapPin(props) {
     <div>
       <div 
         style={marker}
-        onClick={() => togglePopup(stopName)}
+        onClick={() => togglePopup(name)}
       />
       <div
         style={arrow}
         className={"arrow"}
-        id={stopName+"-arrow"}
+        id={name+"-arrow"}
 
       />
       <div 
         style={boxContainer} 
         className={"boxContainer"}
-        id={stopName+"-boxContainer"}
+        id={name+"-boxContainer"}
       >
         <div style={header}>
-          <h3>{stopName}</h3>
+          <h3>{name}</h3>
           <div>
-          <CloseButton style={closeButton} onClick={() => togglePopup(stopName)}></CloseButton>
+          <CloseButton style={closeButton} onClick={() => togglePopup(name)}></CloseButton>
           </div>
         </div>
         {data
