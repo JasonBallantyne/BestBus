@@ -1,7 +1,7 @@
-from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-q5)*s*j%gz7qkf7=h8b5b$j(7_lxusojfj7az&48sbk(!&_nf=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tomwalsh96-summer-project.herokuapp.com']
 
 
 # Application definition
@@ -43,11 +43,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    # React Dev App Domain
-    "http://localhost:3000",
-    "http://172.22.80.1:3000"
-]
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'django_graphQL.urls'
 
@@ -118,6 +114,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

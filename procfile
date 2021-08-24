@@ -1,0 +1,2 @@
+release: python manage.py migrate
+web: gunicorn diango_graphQL.wsgi --log-file -
