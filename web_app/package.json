@@ -2,8 +2,7 @@
   "name": "web_app",
   "version": "0.1.0",
   "engines": {
-    "node": "14.17.1",
-    "npm": "6.14.13"
+    "node": "14.17.2"
   },
   "private": true,
   "dependencies": {
