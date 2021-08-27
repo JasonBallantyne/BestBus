@@ -17,13 +17,6 @@ class Query(graphene.ObjectType):
                                  month=graphene.String(required=True),
                                  list_size=graphene.Int(required=True))
 
-    stop_prediction_tom = graphene.String(stop_num=graphene.String(required=True),
-                                          day=graphene.String(required=True),
-                                          hour=graphene.String(required=True),
-                                          minute=graphene.String(required=True),
-                                          month=graphene.String(required=True),
-                                          list_size=graphene.Int(required=True))
-
     stops_on_route = graphene.List(UniqueRoutesType,
                                    route_num=graphene.String(required=True),
                                    direction=graphene.String(required=True))
