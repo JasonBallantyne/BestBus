@@ -3,6 +3,15 @@ ResearchPracticumTeam3
 
 A Dublin Bus application.
 
+# to run
+- install docker (https://www.docker.com/get-started) for windows, or run `sudo apt install docker.io` for a Linux distribution (https://www.linux.com/topic/desktop/how-install-and-use-docker-linux/).
+- run `docker-compose build`
+- run `docker-compose up`
+
+The application will be hosted at localhost:80.
+
+If running on a Linux system, the docker-compose commands may need to be prefaced by sudo. 
+
 ## Web App
 Users can interact with our service using a mobile optimised web app. We have tried our best to ensure quality and intuitive UI design, iteratively devloping in response to customer feedback.
 
